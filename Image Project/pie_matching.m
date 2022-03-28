@@ -1,0 +1,118 @@
+function  pie_matching( rect_prop,rect_num,text_prop,text_num,circle_props,pic )
+
+allareas = [circle_props.Area];
+allareas
+totalarea = sum(allareas);
+     check=[];
+     
+
+
+if rect_num==text_num
+ 
+ for i=1:text_num
+     min_distance_rect_circ=1000000;%%%dictance of ecludin between cicle and rect%%
+     min_distance_rect_text=1000000;
+     index_rect=0;
+     index_text=0;
+
+
+
+    x1= circle_props(i).Centroid(1);
+    y1= circle_props(i).Centroid(2);
+    x1=uint64(x1);
+    y1=uint64(y1);
+    r1 = pic(y1,x1,1);
+    g1 = pic(y1,x1,2);
+    b1= pic(y1,x1,3);
+    
+    r1=double(r1);
+    g1=double(g1);
+    b1=double(b1);
+
+
+   
+
+
+
+
+
+     for e=1:rect_num
+         x2= rect_prop(e).Centroid(1);
+         y2= rect_prop(e).Centroid(2);
+         x2=uint64(x2);
+         y2=uint64(y2);
+          r2 = pic(y2,x2,1);
+          g2 = pic(y2,x2,2);
+          b2=  pic(y2,x2,3);
+          
+          r2=double(r2);
+          g2=double(g2);
+          b2=double(b2);
+          distance1 = sqrt( (r1-r2).^2 + (g1-g2).^2+(b1-b2).^2 );
+
+         if (distance1<min_distance_rect_circ)
+        
+            min_distance_rect_circ=distance1;
+            index_rect=e;
+         end
+       
+     end 
+    for z=1:text_num
+
+          x1= rect_prop(index_rect).Centroid(1);
+          y1= rect_prop(index_rect).Centroid(2);
+          
+          
+          x1=double(x1);
+          y1=double(y1);
+          x2= text_prop(z).BoundingBox(1);
+          y2= text_prop(z).BoundingBox(2);
+          h2= text_prop(z).BoundingBox(4);
+          x2=double(x2);
+          y2=double(y2);
+          h2=double(h2);
+          
+          y2=y2+(h2/2);
+
+          
+          distance2 = sqrt( (x1-x2).^2 + (y1-y2).^2 );
+          
+            
+
+        if (distance2<=min_distance_rect_text)
+           
+            
+   
+        
+        min_distance_rect_text=distance2;
+        index_text=z;
+        
+        end
+    end
+    perecentage=100*circle_props(i).Area/totalarea;
+    perecentage
+    
+    
+     x=text_prop(index_text).BoundingBox(1);
+     y=text_prop(index_text).BoundingBox(2);
+     w=text_prop(index_text).BoundingBox(3);
+     h=text_prop(index_text).BoundingBox(4);
+   
+    crop=imcrop(pic,[x y w h]);
+
+    
+    subplot(round(text_num/2 ),2,i),imshow(crop)
+	title(['perecentage : ',num2str(round(perecentage)) , ' %'])
+    
+    check= [check index_text];
+	
+     
+ end    
+    
+    
+end 
+
+
+
+end
+

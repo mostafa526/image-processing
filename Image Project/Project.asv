@@ -1,0 +1,26 @@
+clc;
+close all  ;
+ 
+img= imread('circle1.jpg');
+[CircleFlag ,I] = CheckingType(img);
+
+
+if CircleFlag 
+    Props = CircleProps(I);% return value = Parts Area , Cetroid
+    RGBBox = GetLegends( img );% return value = RGBBox
+   [ rect,num_rect,text,num_text ] =  extract_legends(RGBBox);
+   pie_matching(rect,num_rect,text,num_text ,Props  , img)
+    
+    
+    
+    
+    
+    
+    
+    
+else
+%    Props = ColProps(img);% return value = BoundingBox
+%      RGBBox = GetLegends( img );% return value = RGBBox
+%     extract_legends(RGBBox)
+end
+
